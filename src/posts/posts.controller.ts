@@ -16,6 +16,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
 import { User } from '../auth/schema/user.schema';
 import { Document } from 'mongoose';
+import { Query } from '@nestjs/common';
 
 interface AuthRequest extends Request {
   user: User & Document & { _id: string };
@@ -27,8 +28,11 @@ export class PostsController {
 
   // Public — get all posts
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
+  ) {
+    return this.postsService.findAll(parseInt(page), parseInt(limit));
   }
 
   // Public — get single post

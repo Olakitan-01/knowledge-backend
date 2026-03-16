@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
@@ -20,6 +24,16 @@ export class AuthService {
       signUpDto;
     if (password !== confirmPassword) {
       throw new Error('Passwords not match');
+    }
+
+    const existingEmail = await this.userModel.findOne({ email });
+    if (existingEmail) {
+      throw new BadRequestException('Email already in use');
+    }
+
+    const existingUsername = await this.userModel.findOne({ username });
+    if (existingUsername) {
+      throw new BadRequestException('Username already taken');
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 

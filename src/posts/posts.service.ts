@@ -17,8 +17,23 @@ export class PostsService {
   ) {}
 
   // Get all posts
-  async findAll() {
-    return this.postModel.find().sort({ createdAt: -1 });
+  async findAll(page: number = 1, limit: number = 15) {
+    const skip = (page - 1) * limit;
+
+    const posts = await this.postModel
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await this.postModel.countDocuments();
+    return {
+      posts,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      hasMore: page * limit < total,
+    };
   }
 
   // Get single post
