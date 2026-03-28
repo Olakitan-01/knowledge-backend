@@ -13,6 +13,7 @@ async function bootstrap() {
     origin: [
       'https://knowledge-frontend-00ld.onrender.com',
       'https://knowledge-react-0a65.onrender.com',
+      'https://knowledge-next.onrender.com',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
